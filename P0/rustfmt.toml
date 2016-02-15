@@ -1,0 +1,4 @@
+hard_tabs = true
+fn_brace_style = AlwaysNextLine
+item_brace_style = AlwaysNextLine
+hard_tabs = true

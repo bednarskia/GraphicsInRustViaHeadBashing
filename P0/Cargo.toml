@@ -1,0 +1,8 @@
+[package]
+name = "P0"
+version = "0.1.0"
+authors = ["andrew <bednarskia@hiram.edu>"]
+
+[dependencies]
+gl = "0.5.2"
+glutin = "0.4"
