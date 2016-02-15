@@ -68,6 +68,63 @@ My goal is not to learn just the rustic ways of graphics, but to learn standard 
 <a id="p0" class="anchor" href="#p0" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>P0</h1>
 
 <p>To start off I'll just make a new cargo project P0, copy my preferred rustfmt.toml over and just work on making the examples from here  <a href="https://github.com/bjz/gl-rs/tree/master/gl">https://github.com/bjz/gl-rs/tree/master/gl</a> work.</p>
+
+<p>Getting the first example "basic.rs" running was simply a matter of adding the "gl" and "glutin" dependencies to the Cargo.toml. Moving on to "Triangle.rs" (renamed to Main.rs of course) it should be easy, just a cargo build and.... well crap.</p>
+
+<blockquote>
+<p>Running <code>target/debug/P0</code>
+thread '' panicked at '0:1(10): error: GLSL 1.50 is not supported. Supported versions are: 1.10, 1.20, and 1.00 ES', src/main.rs:66
+note: Run with <code>RUST_BACKTRACE=1</code> for a backtrace.
+Process didn't exit successfully: <code>target/debug/P0</code> (exit code: 101)</p>
+</blockquote>
+
+<p>lets change the shader versions to 120.</p>
+
+<blockquote>
+<p>thread '' panicked at '0:2(1): error: <code>in' qualifier in declaration of</code>position' only valid for function parameters in GLSL 1.2</p>
+</blockquote>
+
+<p>crud. But after a bit of googling and bouncing here <a href="https://www.opengl.org/discussion_boards/showthread.php/181729-Invalid-qualifiers-in-in-global-variable">https://www.opengl.org/discussion_boards/showthread.php/181729-Invalid-qualifiers-in-in-global-variable</a> I changed these shaders:</p>
+
+<pre><code>// Shader sources
+static VS_SRC: &amp;'static str =
+   "#version 150\n\
+    in vec2 position;\n\
+    void main() {\n\
+       gl_Position = vec4(position, 0.0, 1.0);\n\
+     }";
+
+static FS_SRC: &amp;'static str =
+   "#version 150\n\
+    out vec4 out_color;\n\
+    void main() {\n\
+       out_color = vec4(1.0, 1.0, 1.0, 1.0);\n\
+    }";
+</code></pre>
+
+<p>to</p>
+
+<pre><code>static VS_SRC: &amp;'static str =
+   "#version 120\n\
+    attribute vec2 position;\n\
+    void main() {\n\
+       gl_Position = vec4(position, 0.0, 1.0);\n\
+    }";
+
+static FS_SRC: &amp;'static str =
+   "#version 120\n\
+    void main() {\n\
+        gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);\n\
+    }";
+</code></pre>
+
+<p>And I get a nice white triangle. </p>
+
+<p>This would be a good place to stop for the night, but you know it's winter in Ohio, and I'd like to think about spring; so I think I'll edit it to a nice green triangle instead.</p>
+
+<p>Final thoughts: It's good that it is working, next time I think I/we should look into why it works. Also I'm sure I'll come back to look at this and wonder how I made so many grammar mistakes...  I should probably figure out how to add pictures.</p>
+
+<hr>
       </section>
     </div>
 
