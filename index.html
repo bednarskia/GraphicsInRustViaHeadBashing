@@ -125,6 +125,105 @@ static FS_SRC: &amp;'static str =
 <p>Final thoughts: It's good that it is working, next time I think I/we should look into why it works. Also I'm sure I'll come back to look at this and wonder how I made so many grammar mistakes...  I should probably figure out how to add pictures.</p>
 
 <hr>
+
+<h2>
+<a id="digging-deeper-into-the-gl-rs-triangle-example" class="anchor" href="#digging-deeper-into-the-gl-rs-triangle-example" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Digging deeper into the gl-rs triangle example.</h2>
+
+<p>Alright, I think I'll run through the example top to bottom and guess how it works. I could be totally wrong however.</p>
+
+<h3>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>License</h3>
+
+<p>First off this thing is apache licensed, presumably since I've left that alone all is fine here.</p>
+
+<h3>
+<a id="externsuses" class="anchor" href="#externsuses" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Externs/uses</h3>
+
+<p>Pretty standard stuff here, gl and glutin both had to be in cargo.toml for this to work.</p>
+
+<h3>
+<a id="vertices-and-shaders" class="anchor" href="#vertices-and-shaders" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Vertices and shaders</h3>
+
+<p>First off we see a simple array floats that seem to be the x,y coords for our triangle, modifying them shows this to be true.
+Next:</p>
+
+<blockquote>
+<p>static VS_SRC: &amp;'static str =</p>
+</blockquote>
+
+<p>I'm gonna say this is a Vertex Shader, I'm not 100% positive on what it does however.</p>
+
+<blockquote>
+<p>gl_Position = vec4(position, 0.0, 1.0);\n\</p>
+</blockquote>
+
+<p>Position seems to be the 2d coords, probably from the vertex array.
+The first number is probably the Z coord.....</p>
+
+<p>So the last coord, well I doubt we're working in a relativistic system here so to google batman!
+<a href="http://stackoverflow.com/questions/9943636/why-not-vec3-for-opengl-es-2-0-gl-position">http://stackoverflow.com/questions/9943636/why-not-vec3-for-opengl-es-2-0-gl-position</a>
+and following there to gamedev, and a link in a post by "Jovan" <a href="http://bishopw.loni.ucla.edu/air5/homogenous.html">http://bishopw.loni.ucla.edu/air5/homogenous.html</a> its for linear transformations, neat. Just for fun setting this to different (non-zero) values seems to scale the triangle; which matches what I'd expect from the link.</p>
+
+<p>Finally:</p>
+
+<blockquote>
+<p>gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0);\n\
+This is how I made the triangle green, pretty obviously rgba colors here.</p>
+</blockquote>
+
+<h3>
+<a id="compile-shader" class="anchor" href="#compile-shader" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Compile shader</h3>
+
+<p>Well this would seem to load those shaders into opengl, nothing to crazy here.
+It's neat how the shaders are basically referred to by a uint handle.</p>
+
+<h3>
+<a id="link-program" class="anchor" href="#link-program" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Link Program</h3>
+
+<p>This seems to associate the shaders together, and returns a handle to that unit.</p>
+
+<h3>
+<a id="main" class="anchor" href="#main" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>main</h3>
+
+<p>This seems to create the window, run the previous two fns, in fact nothing seems to interesting until we look at...</p>
+
+<blockquote>
+<p>gl::GenVertexArrays(1, &amp;mut vao);</p>
+</blockquote>
+
+<p>Looking here <a href="https://www.opengl.org/wiki/GLAPI/glGenVertexArrays">https://www.opengl.org/wiki/GLAPI/glGenVertexArrays</a></p>
+
+<p>We see that the 1 means we only want to create a single vertex array, and the pointer to va0  is  a stand in for a C style int array with one element to store the new handle.</p>
+
+<p>A similar pattern seems to hold, so I'll skip down to</p>
+
+<blockquote>
+<p>for event in window.wait_events() {</p>
+</blockquote>
+
+<p>Since I'm usually in c# land the first thing I notice is an event loop rather than some callbacky-delagatey-thing here, which is cool.</p>
+
+<p>It looks like this just colors the background black and draws the triangle, just to be sure I've changed the background to be red,  added a 4th vertex to the array in the vertices, and told it to draw another triangle using the last 3 coords like this.....</p>
+
+<blockquote>
+<p>gl::DrawArrays(gl::TRIANGLES, 1, 4);</p>
+</blockquote>
+
+<p>And as soon as I bother to figure out images I'll upload one.</p>
+
+<p>I think this will be the final modification to P0, to see the changes I made I suppose you can diff the main.rs file with the Triangle.rs file in gl-rs if you desire.</p>
+
+<h2>
+<a id="final-thoughts" class="anchor" href="#final-thoughts" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Final thoughts:</h2>
+
+<p>Keeping this record actually is forcing me to to look a little more in depth at how this works. So thank you anonymous reader for basically serving as a rubber duck on steroids!</p>
+
+<h2>
+<a id="next-time" class="anchor" href="#next-time" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Next time</h2>
+
+<p>Since one of my gripes was a lack of a basic rust opengl tutorial, I think I will work through this <a href="https://en.wikibooks.org/wiki/OpenGL_Programming#Modern_OpenGL">https://en.wikibooks.org/wiki/OpenGL_Programming#Modern_OpenGL</a> one designed for c/c++ and convert the examples to rust as I go... </p>
+
+<hr>
       </section>
     </div>
 
