@@ -22,10 +22,12 @@ use std::str;
 use std::ffi::CString;
 
 // Vertex data
-static VERTEX_DATA: [GLfloat; 6] = [
-     0.0,  0.5,
+static VERTEX_DATA: [GLfloat; 8] = [
+     0.0,  1.0,
      0.5, -0.5,
-    -0.5, -0.5
+    -0.5, -0.5,
+     0.0, -1.0,
+     
 ];
 
 // Shader sources
@@ -33,7 +35,7 @@ static VS_SRC: &'static str =
    "#version 120\n\
     attribute vec2 position;\n\
     void main() {\n\
-       gl_Position = vec4(position, 0.0, 1.0);\n\
+       gl_Position = vec4(position, 0.0, 2.0);\n\
     }";
 
 static FS_SRC: &'static str =
@@ -135,12 +137,13 @@ fn main() {
 
     for event in window.wait_events() {
         unsafe {
-            // Clear the screen to black
-            gl::ClearColor(0.3, 0.3, 0.3, 1.0);
+            // Clear the screen to red
+            gl::ClearColor(1.0, 0.0, 0.0, 1.0);
             gl::Clear(gl::COLOR_BUFFER_BIT);
 
             // Draw a triangle from the 3 vertices
             gl::DrawArrays(gl::TRIANGLES, 0, 3);
+            gl::DrawArrays(gl::TRIANGLES, 1, 4);
         }
 
         window.swap_buffers().unwrap();
