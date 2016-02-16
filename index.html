@@ -48,7 +48,7 @@ My goal is not to learn just the rustic ways of graphics, but to learn standard 
 <p>To fit with my goal of being as close to opengl as possible I am opting to use the gl-rs <a href="https://github.com/bjz/gl-rs">https://github.com/bjz/gl-rs</a> library as opposed to gfx-rs or glium.</p>
 
 <h1>
-<a id="hardware" class="anchor" href="#hardware" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>hardware</h1>
+<a id="hardware" class="anchor" href="#hardware" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Hardware</h1>
 
 <p>I'm doing this on a dell latitude e6510 laptop I bought used and has...</p>
 
@@ -167,14 +167,15 @@ and following there to gamedev, and a link in a post by "Jovan" <a href="http://
 <p>Finally:</p>
 
 <blockquote>
-<p>gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0);\n\
-This is how I made the triangle green, pretty obviously rgba colors here.</p>
+<p>gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0);\n\</p>
 </blockquote>
+
+<p>This is how I made the triangle green, pretty obviously rgba colors here.</p>
 
 <h3>
 <a id="compile-shader" class="anchor" href="#compile-shader" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Compile shader</h3>
 
-<p>Well this would seem to load those shaders into opengl, nothing to crazy here.
+<p>Well this would seem to load those shaders into opengl, nothing too crazy here.
 It's neat how the shaders are basically referred to by a uint handle.</p>
 
 <h3>
@@ -209,7 +210,7 @@ It's neat how the shaders are basically referred to by a uint handle.</p>
 <p>gl::DrawArrays(gl::TRIANGLES, 1, 4);</p>
 </blockquote>
 
-<p>And as soon as I bother to figure out images I'll upload one.</p>
+<img src="images/P0/final.png" alt="Amazing graphical output! let mind = blown;" style="width:304px;height:228px;">
 
 <p>I think this will be the final modification to P0, to see the changes I made I suppose you can diff the main.rs file with the Triangle.rs file in gl-rs if you desire.</p>
 
